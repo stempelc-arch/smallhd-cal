@@ -804,9 +804,11 @@ def _dynamic_range_checks(session: CalibrationSession) -> list[tuple[str, str]]:
 
     return [(
         "PASS",
-        "Dynamic range measured: "
-        f"black Y {summary.black_y:.4f}, white Y {summary.white_y:.2f}, "
-        f"contrast {summary.contrast_ratio:.0f}:1.",
+        (
+            "Dynamic range measured: "
+            f"black Y {summary.black_y:.4f}, white Y {summary.white_y:.2f}, "
+            f"contrast {summary.contrast_ratio:.0f}:1."
+        ),
     )]
 
 
@@ -818,8 +820,7 @@ def _chain_state_checks(session: CalibrationSession) -> list[tuple[str, str]]:
     if missing:
         checks.append((
             "WARN",
-            "Missing chain state for "
-            f"{session.device_mode}: {', '.join(missing)}.",
+            f"Missing chain state for {session.device_mode}: {', '.join(missing)}.",
         ))
     else:
         checks.append(("PASS", f"Chain state complete for {session.device_mode}."))
@@ -831,8 +832,10 @@ def _chain_state_checks(session: CalibrationSession) -> list[tuple[str, str]]:
     if missing_recommended:
         checks.append((
             "WARN",
-            "Recommended chain state missing for "
-            f"{session.device_mode}: {', '.join(missing_recommended)}.",
+            (
+                "Recommended chain state missing for "
+                f"{session.device_mode}: {', '.join(missing_recommended)}."
+            ),
         ))
     elif recommended:
         checks.append(("PASS", f"Recommended chain state recorded for {session.device_mode}."))
@@ -844,8 +847,11 @@ def _chain_state_checks(session: CalibrationSession) -> list[tuple[str, str]]:
 
 
 def _chain_state_value_missing(session: CalibrationSession, field: str) -> bool:
-    value = session.chain_state.get(field)
-    return not value or value.strip().upper() == "TBD"
+    # not value.strip() (not "not value"): a whitespace-only value is falsy-ish
+    # to a human but truthy to Python, so "not value" alone would let a stray
+    # space through as if the field were filled in.
+    value = (session.chain_state.get(field) or "").strip()
+    return not value or value.upper() == "TBD"
 
 
 def _profile_consistency_checks(
@@ -866,8 +872,10 @@ def _profile_consistency_checks(
         else:
             checks.append((
                 "FAIL",
-                "Profile index order "
-                f"{profile_index_order} differs from selected LUT {selected.cube_index_order}.",
+                (
+                    f"Profile index order {profile_index_order} differs from selected LUT "
+                    f"{selected.cube_index_order}."
+                ),
             ))
 
     legal_reproduces = profile.get("identity_legal_reproduces_bypass")

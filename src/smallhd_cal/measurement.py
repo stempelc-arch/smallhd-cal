@@ -81,7 +81,7 @@ def _parse_channel(raw: str) -> float:
 
 
 def _float_to_u8(value: float) -> int:
-    return int(round(max(0.0, min(1.0, value)) * 255.0))
+    return round(max(0.0, min(1.0, value)) * 255.0)
 
 
 def _measurement_to_json(measurement: Measurement) -> dict[str, Any]:

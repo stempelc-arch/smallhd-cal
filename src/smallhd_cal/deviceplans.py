@@ -99,20 +99,28 @@ def _wizard_identity_steps(device: str, feed_range: str, extra: list[str] | None
         f"On the {device}: menu → Settings → Calibration → New Calibration → Generic Calibration.",
         "Choose the calibration target Rec 709, then Accept Calibration Target.",
         f"Set the range to {feed_range}. Use the same range on every import this session.",
-        f"At the 'Upload LUT stage / bypass mode Profile Display' step, UPLOAD {IDENTITY_CUBE}. "
-        "Do NOT choose bypass 'Profile Display' — the baseline must run through the ACTIVE "
-        "identity LUT so it sits in the same backlight state as the later verifies.",
-        "HDR / Dynamic Range step: this SCALES the panel's output, so it's a real brightness "
-        "lever. If the brightness is inconsistent or won't reach target, don't skip — enter "
-        "White (max) and Black (min) here (measure with the readout's Save White / Save Black; "
-        "black ≈ 0.1 nit) and enter the SAME two values at EVERY import this session, or the "
-        "calibration is invalid. Otherwise Skip / Apply factory.",
+        (
+            f"At the 'Upload LUT stage / bypass mode Profile Display' step, UPLOAD {IDENTITY_CUBE}. "
+            "Do NOT choose bypass 'Profile Display' — the baseline must run through the ACTIVE "
+            "identity LUT so it sits in the same backlight state as the later verifies."
+        ),
+        (
+            "HDR / Dynamic Range step: this SCALES the panel's output, so it's a real brightness "
+            "lever. If the brightness is inconsistent or won't reach target, don't skip — enter "
+            "White (max) and Black (min) here (measure with the readout's Save White / Save Black; "
+            "black ≈ 0.1 nit) and enter the SAME two values at EVERY import this session, or the "
+            "calibration is invalid. Otherwise Skip / Apply factory."
+        ),
         "Save Calibration, then ACTIVATE the new calibration entry.",
-        "Confirm the Color Pipe still reads the checklist values (SDR / Rec 709 / D65 / 2.4 / "
-        f"Range Legal / YCC Rec 709), manual adjustments OFF, Studio brightness fixed at {STUDIO_NITS}.",
-        "Checksum (the app's baseline will verify too): black ≈ 0.1 nit at ~1000:1 contrast, "
-        "native green y ≈ 0.70. Black lifted to ~0.7–1 nit = wrong range; "
-        "green y ≈ 0.60 = a correction LUT is still active instead of the identity.",
+        (
+            "Confirm the Color Pipe still reads the checklist values (SDR / Rec 709 / D65 / 2.4 / "
+            f"Range Legal / YCC Rec 709), manual adjustments OFF, Studio brightness fixed at {STUDIO_NITS}."
+        ),
+        (
+            "Checksum (the app's baseline will verify too): black ≈ 0.1 nit at ~1000:1 contrast, "
+            "native green y ≈ 0.70. Black lifted to ~0.7–1 nit = wrong range; "
+            "green y ≈ 0.60 = a correction LUT is still active instead of the identity."
+        ),
         *(extra or []),
     ]
 
@@ -120,27 +128,39 @@ def _wizard_identity_steps(device: str, feed_range: str, extra: list[str] | None
 def _wizard_install_steps(device: str, feed_range: str, extra: list[str] | None = None) -> list[str]:
     """The PageOS 5.5.6 correction-LUT import + hardware verify, step by step."""
     return [
-        "Do not touch the monitor's brightness, controls, Color Pipe, or input between the "
-        "sweep and this import — the LUT is only valid for the exact state it was measured in.",
-        "Insert the SD card (the app wrote the correction LUT and removed older ones, "
-        "so exactly one .cube is on it).",
+        (
+            "Do not touch the monitor's brightness, controls, Color Pipe, or input between the "
+            "sweep and this import — the LUT is only valid for the exact state it was measured in."
+        ),
+        (
+            "Insert the SD card (the app wrote the correction LUT and removed older ones, "
+            "so exactly one .cube is on it)."
+        ),
         f"On the {device}: menu → Settings → Calibration → New Calibration → Generic Calibration.",
         "Choose the calibration target Rec 709, then Accept Calibration Target.",
         f"Set the range to {feed_range} — identical to the identity import.",
-        "At the 'Upload LUT stage / bypass mode Profile Display' step, UPLOAD the cube named "
-        "in the app (not bypass Profile Display).",
-        "HDR / Dynamic Range step: enter the SAME White (max) and Black (min) you used at the "
-        "identity import (the app shows them under 'Levels to enter'). If you skipped there, skip "
-        "here too — the choice must be identical across the session.",
+        (
+            "At the 'Upload LUT stage / bypass mode Profile Display' step, UPLOAD the cube named "
+            "in the app (not bypass Profile Display)."
+        ),
+        (
+            "HDR / Dynamic Range step: enter the SAME White (max) and Black (min) you used at the "
+            "identity import (the app shows them under 'Levels to enter'). If you skipped there, skip "
+            "here too — the choice must be identical across the session."
+        ),
         "Save Calibration, then ACTIVATE the imported calibration.",
-        "MATCH BRIGHTNESS (matched monitors): show white, open “Read peak nits”, and nudge the "
-        "fine-tune brightness slider until the FINAL white reads the shared match target — the "
-        "SAME nits on every monitor. Each LUT dims luminance differently, so baselines that "
-        "matched won't have matching final whites; this is backlight-only and doesn't change "
-        "the colour calibration.",
-        "Put the probe back on the centre of the panel and click Verify in the app — "
-        "the hardware measurement with this LUT active is the only truth; the next "
-        "refine (if any) is built from it.",
+        (
+            "MATCH BRIGHTNESS (matched monitors): show white, open “Read peak nits”, and nudge the "
+            "fine-tune brightness slider until the FINAL white reads the shared match target — the "
+            "SAME nits on every monitor. Each LUT dims luminance differently, so baselines that "
+            "matched won't have matching final whites; this is backlight-only and doesn't change "
+            "the colour calibration."
+        ),
+        (
+            "Put the probe back on the centre of the panel and click Verify in the app — "
+            "the hardware measurement with this LUT active is the only truth; the next "
+            "refine (if any) is built from it."
+        ),
         *(extra or []),
     ]
 
@@ -171,9 +191,11 @@ DEVICE_PLANS: dict[str, DevicePlan] = {
         identity_steps=_wizard_identity_steps(
             "Cine 7 TX", _SDI_RANGE,
             extra=[
-                "Converter check: on the 1703, SDI OUT must be CLEAN — no LUT, look, "
-                "overlay, or scaling. A dirty converter shows up as black lift or a "
-                "shrunken gamut in the baseline checksums.",
+                (
+                    "Converter check: on the 1703, SDI OUT must be CLEAN — no LUT, look, "
+                    "overlay, or scaling. A dirty converter shows up as black lift or a "
+                    "shrunken gamut in the baseline checksums."
+                ),
             ],
         ),
         install_steps=_wizard_install_steps("Cine 7 TX", _SDI_RANGE),
@@ -203,20 +225,26 @@ DEVICE_PLANS: dict[str, DevicePlan] = {
         identity_steps=_wizard_identity_steps(
             "Cine 7 RX", _WIRELESS_RANGE,
             extra=[
-                "Confirm the wireless link is passing VIDEO from the standalone Teradek "
-                "(a paired link with no picture is the known failure mode).",
-                "RX-specific: right after ACTIVATING the identity, note the white nits "
-                "(app → Read peak nits). Every later import must come back to this same "
-                "white level — a jump (e.g. ~100 → ~80 nits) means the wizard state did "
-                "not reproduce: stop and re-import instead of measuring on.",
+                (
+                    "Confirm the wireless link is passing VIDEO from the standalone Teradek "
+                    "(a paired link with no picture is the known failure mode)."
+                ),
+                (
+                    "RX-specific: right after ACTIVATING the identity, note the white nits "
+                    "(app → Read peak nits). Every later import must come back to this same "
+                    "white level — a jump (e.g. ~100 → ~80 nits) means the wizard state did "
+                    "not reproduce: stop and re-import instead of measuring on."
+                ),
             ],
         ),
         install_steps=_wizard_install_steps(
             "Cine 7 RX", _WIRELESS_RANGE,
             extra=[
-                "RX-specific: check the white nits after activation against the value "
-                "noted at identity import BEFORE clicking Verify — a level jump "
-                "invalidates the verify you are about to take.",
+                (
+                    "RX-specific: check the white nits after activation against the value "
+                    "noted at identity import BEFORE clicking Verify — a level jump "
+                    "invalidates the verify you are about to take."
+                ),
             ],
         ),
         session_prefix="cine7-rx",
@@ -243,8 +271,10 @@ DEVICE_PLANS: dict[str, DevicePlan] = {
         identity_steps=_wizard_identity_steps(
             "1703", _SDI_RANGE,
             extra=[
-                "The 1703's menus differ from the Cine 7's — note the actual menu path "
-                "here on the first run so this checklist stays exact.",
+                (
+                    "The 1703's menus differ from the Cine 7's — note the actual menu path "
+                    "here on the first run so this checklist stays exact."
+                ),
             ],
         ),
         install_steps=_wizard_install_steps("1703", _SDI_RANGE),

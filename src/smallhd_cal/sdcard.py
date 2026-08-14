@@ -82,7 +82,12 @@ def read_card(volume: Path) -> Card:
         data = json.loads(marker.read_text(encoding="utf-8"))
         raw_managed = data.get("managed", [])
         if not isinstance(raw_managed, list):
-            raise ValueError(f"marker 'managed' must be a list, got {type(raw_managed).__name__}")
+            # ValueError (not TypeError): this is a malformed marker file, the
+            # same category as bad JSON below, and the except clause here
+            # treats both as "not initialized" — TypeError would slip past it.
+            raise ValueError(  # noqa: TRY004
+                f"marker 'managed' must be a list, got {type(raw_managed).__name__}"
+            )
         managed = tuple(str(name) for name in raw_managed)
         return Card(volume=volume, initialized=True, managed=managed)
     except (OSError, ValueError):

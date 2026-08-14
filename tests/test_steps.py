@@ -233,7 +233,6 @@ def test_suggested_session_name_and_delete(tmp_path) -> None:
     from datetime import UTC, datetime
 
     from smallhd_cal import steps
-    from smallhd_cal.session import load_session
 
     root = tmp_path / "sessions"
     today = f"{datetime.now(UTC):%Y-%m-%d}"
@@ -247,7 +246,6 @@ def test_suggested_session_name_and_delete(tmp_path) -> None:
     assert name2 == f"smallhd-cine-7-rec709-{today}-2"
 
     assert steps.session_is_finished(root / name1) is False
-    load_session  # keep import used
 
     steps.delete_session(root, name1)
     assert not (root / name1 / "session.json").exists()

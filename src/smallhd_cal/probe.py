@@ -223,7 +223,7 @@ class SpotreadSession:
             pass
         self._proc = None
 
-    def __enter__(self) -> SpotreadSession:
+    def __enter__(self) -> SpotreadSession:  # noqa: PYI034 (typing.Self needs 3.11+; project supports 3.10)
         return self.start()
 
     def __exit__(self, *_exc) -> None:

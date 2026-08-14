@@ -492,7 +492,7 @@ def _write_ship_capture(path, *, tint: bool):
     scale = 65.0 / float((matrix @ np.ones(3))[1])
     # >=20 patches so _mean_de2000 will score it (grays + primaries + mixes).
     grays = [round(v / 255, 6) for v in (0, 16, 48, 80, 128, 176, 224, 255)]
-    patches = [("gray_%03d" % round(v * 255), v, v, v) for v in grays]
+    patches = [(f"gray_{round(v * 255):03d}", v, v, v) for v in grays]
     patches += [
         ("red", 1, 0, 0), ("green", 0, 1, 0), ("blue", 0, 0, 1),
         ("yellow", 1, 1, 0), ("cyan", 0, 1, 1), ("magenta", 1, 0, 1),

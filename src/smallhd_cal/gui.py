@@ -802,14 +802,22 @@ class SmallHDCalApp(tk.Tk):
             self._steps_box(
                 f"{plan.label} — set brightness with the probe (do this LAST)",
                 [
-                    "The monitor's New Calibration wizard RESETS the brightness, so tune it now — "
-                    "after the identity LUT is imported and active, right before the baseline.",
-                    "Open the live readout (the app puts a white field on the monitor) and place "
-                    "the probe on the centre of the panel.",
-                    f"Nudge the Studio brightness slider until the readout reads ~{STUDIO_NITS} nits "
-                    "(it turns green on target). Matched monitors must land on the same level.",
-                    "Re-tune the same way after loading the CORRECTION LUT (that wizard resets it "
-                    "too) — before you Verify.",
+                    (
+                        "The monitor's New Calibration wizard RESETS the brightness, so tune it now — "
+                        "after the identity LUT is imported and active, right before the baseline."
+                    ),
+                    (
+                        "Open the live readout (the app puts a white field on the monitor) and place "
+                        "the probe on the centre of the panel."
+                    ),
+                    (
+                        f"Nudge the Studio brightness slider until the readout reads ~{STUDIO_NITS} nits "
+                        "(it turns green on target). Matched monitors must land on the same level."
+                    ),
+                    (
+                        "Re-tune the same way after loading the CORRECTION LUT (that wizard resets it "
+                        "too) — before you Verify."
+                    ),
                 ],
                 r,
             )
@@ -963,9 +971,11 @@ class SmallHDCalApp(tk.Tk):
         self._refresh_suggested_name()
 
     def _refresh_suggested_name(self) -> None:
+        # Best-effort autofill only: any failure just leaves the name field
+        # blank for the operator to type, so it's fine to swallow silently.
         try:
             self.new_name.set(steps.suggested_session_name(self.sessions_root, self.new_preset.get()))
-        except Exception:  # noqa: BLE001
+        except Exception:  # noqa: BLE001, S110
             pass
 
     def _delete_session(self) -> None:
@@ -1566,7 +1576,7 @@ class SmallHDCalApp(tk.Tk):
         # the persistent SpotreadSession if given, else relaunches spotread.
         if self.live_cancel:
             raise _LiveCancelled()
-        rgb8 = tuple(int(round(max(0.0, min(1.0, v)) * 255)) for v in (r, g, b))
+        rgb8 = tuple(round(max(0.0, min(1.0, v)) * 255) for v in (r, g, b))
         color = f"#{rgb8[0]:02x}{rgb8[1]:02x}{rgb8[2]:02x}"
         shown = threading.Event()
         self.worker_messages.put(("live-show", (color, shown)))
