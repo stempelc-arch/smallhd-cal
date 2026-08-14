@@ -1,5 +1,7 @@
 # SmallHD Calibration Project
 
+[![CI](https://github.com/stempelc-arch/smallhd-cal/actions/workflows/ci.yml/badge.svg)](https://github.com/stempelc-arch/smallhd-cal/actions/workflows/ci.yml)
+
 VS Code-ready starter project for experimenting with SmallHD-compatible LUT generation, patch playback, and eventual ColorChecker Display Plus measurement.
 
 ## Current goal
@@ -27,7 +29,7 @@ This project does **not** require custom firmware at this stage.
 
 ## Open in VS Code
 
-1. Unzip this folder.
+1. `git clone https://github.com/stempelc-arch/smallhd-cal.git && cd smallhd-cal`
 2. Open `smallhd-cal.code-workspace` in VS Code.
 3. Install the recommended Python extensions when prompted.
 4. Run the VS Code task: **Create virtual environment**.
@@ -35,11 +37,23 @@ This project does **not** require custom firmware at this stage.
 Or from Terminal:
 
 ```bash
-cd smallhd_cal_vscode
+git clone https://github.com/stempelc-arch/smallhd-cal.git
+cd smallhd-cal
 python3 -m venv .venv
 .venv/bin/python -m pip install --upgrade pip
 .venv/bin/pip install -r requirements.txt
 ```
+
+That covers running the app, the CLI tools, and `pytest`/`ruff`. To also build
+the macOS `.app`/`.dmg` (see `packaging/macos/README.md`), install the
+packaging extras instead: `.venv/bin/pip install -e ".[dev,packaging]"`.
+
+Captured sessions, measurements, device profiles, and generated LUTs
+(`sessions/`, `measurements/*.json`, `profiles/`, `luts/`, `exports/`) are
+gitignored — this repo ships code, tests, and docs only. A fresh clone starts
+with an empty slate for those; `tools/generate_smallhd_luts.py` regenerates
+the deterministic reference LUTs (identity + visible-test) used in the
+physical test order below.
 
 ## Useful VS Code tasks
 
@@ -74,6 +88,15 @@ The capture script uses ArgyllCMS `spotread`. It first looks for a bundled
 `Argyll*/bin/spotread` inside this project folder and prefers the binary that
 matches the current machine architecture. If no bundled copy is found, it falls
 back to `spotread` on `PATH`.
+
+This repo doesn't ship ArgyllCMS (it's a large third-party binary, not project
+source — see `packaging/macos/README.md` for the bundling policy used when
+building the `.app`). For local development with real hardware, either drop an
+`Argyll_<version>/` folder (containing `bin/spotread`) into the project root,
+or install ArgyllCMS separately and make sure `spotread` is on `PATH`.
+Everything else (tests, LUT generation, the GUI without live capture) works
+with no probe or ArgyllCMS installed at all.
+
 With the patch player showing each requested color on the SmallHD, run:
 
 ```bash
@@ -136,7 +159,14 @@ GUI expose the same choice via `--mode` and the Correction dropdown.
 
 ## Physical SmallHD test order
 
-Start with the safest LUT test:
+`luts/` is gitignored and starts empty on a fresh clone; generate the
+reference LUTs first:
+
+```bash
+.venv/bin/python tools/generate_smallhd_luts.py
+```
+
+Then start with the safest LUT test:
 
 1. Import `luts/SmallHD_identity_17.cube`
 2. Confirm the image does not visibly change.
