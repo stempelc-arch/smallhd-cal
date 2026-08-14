@@ -1,0 +1,28 @@
+[project]
+name = "smallhd-cal"
+version = "0.1.0"
+description = "SmallHD LUT generation and calibration project starter"
+requires-python = ">=3.10"
+dependencies = [
+  "numpy>=1.26",
+  "scipy>=1.11",
+  "matplotlib>=3.8",
+  "opencv-python>=4.9",
+  "pillow>=10.0"
+]
+
+[project.optional-dependencies]
+dev = [
+  "pytest>=8.0",
+  "ruff>=0.5"
+]
+packaging = [
+  "pyinstaller>=6.0",
+  "dmgbuild>=1.6"
+]
+
+[tool.ruff]
+line-length = 100
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

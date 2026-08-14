@@ -1,0 +1,68 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Create virtual environment",
+      "type": "shell",
+      "command": "python3 -m venv .venv && .venv/bin/python -m pip install --upgrade pip && .venv/bin/pip install -r requirements.txt",
+      "group": "build",
+      "problemMatcher": []
+    },
+    {
+      "label": "Launch GUI",
+      "type": "shell",
+      "command": "${workspaceFolder}/.venv/bin/python tools/smallhd_cal_gui.py",
+      "group": "build",
+      "problemMatcher": []
+    },
+    {
+      "label": "Auto calibrate",
+      "type": "shell",
+      "command": "${workspaceFolder}/.venv/bin/python tools/auto_calibrate.py",
+      "group": "build",
+      "problemMatcher": []
+    },
+    {
+      "label": "Generate SmallHD test LUTs",
+      "type": "shell",
+      "command": "${workspaceFolder}/.venv/bin/python tools/generate_smallhd_luts.py",
+      "group": "build",
+      "problemMatcher": []
+    },
+    {
+      "label": "Generate correction LUT",
+      "type": "shell",
+      "command": "${workspaceFolder}/.venv/bin/python tools/generate_correction_lut.py",
+      "group": "build",
+      "problemMatcher": []
+    },
+    {
+      "label": "Analyze measurements",
+      "type": "shell",
+      "command": "${workspaceFolder}/.venv/bin/python tools/analyze_measurements.py",
+      "group": "build",
+      "problemMatcher": []
+    },
+    {
+      "label": "Generate patch sequence CSV",
+      "type": "shell",
+      "command": "${workspaceFolder}/.venv/bin/python tools/patch_sequence.py",
+      "group": "build",
+      "problemMatcher": []
+    },
+    {
+      "label": "Capture probe measurements",
+      "type": "shell",
+      "command": "${workspaceFolder}/.venv/bin/python tools/capture_measurements.py",
+      "group": "build",
+      "problemMatcher": []
+    },
+    {
+      "label": "Run tests",
+      "type": "shell",
+      "command": "${workspaceFolder}/.venv/bin/python -m pytest -q",
+      "group": "test",
+      "problemMatcher": []
+    }
+  ]
+}

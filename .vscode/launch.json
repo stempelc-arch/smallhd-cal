@@ -1,0 +1,66 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "SmallHD Calibration GUI",
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}/tools/smallhd_cal_gui.py",
+      "console": "integratedTerminal"
+    },
+    {
+      "name": "Auto Calibrate",
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}/tools/auto_calibrate.py",
+      "console": "integratedTerminal"
+    },
+    {
+      "name": "Generate LUTs",
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}/tools/generate_smallhd_luts.py",
+      "console": "integratedTerminal"
+    },
+    {
+      "name": "Generate Correction LUT",
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}/tools/generate_correction_lut.py",
+      "console": "integratedTerminal",
+      "args": ["--measurements", "measurements/measurements_v0.json"]
+    },
+    {
+      "name": "Analyze Measurements",
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}/tools/analyze_measurements.py",
+      "console": "integratedTerminal",
+      "args": ["--measurements", "measurements/measurements_v0.json"]
+    },
+    {
+      "name": "Patch Player",
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}/src/smallhd_cal/patch_player.py",
+      "console": "integratedTerminal",
+      "args": ["--csv", "measurements/patch_sequence_v0.csv", "--seconds", "1.0"]
+    },
+    {
+      "name": "Capture Measurements",
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}/tools/capture_measurements.py",
+      "console": "integratedTerminal",
+      "args": ["--csv", "measurements/patch_sequence_v0.csv", "--out", "measurements/measurements_v0.json"]
+    },
+    {
+      "name": "Parse Firmware",
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}/tools/parse_smallhd_firmware.py",
+      "console": "integratedTerminal",
+      "args": ["data/firmware/smallhd5-v6-3-4-update.bin"]
+    }
+  ]
+}

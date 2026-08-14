@@ -1,0 +1,7 @@
+numpy>=1.26
+scipy>=1.11
+matplotlib>=3.8
+opencv-python>=4.9
+pillow>=10.0
+pytest>=8.0
+ruff>=0.5

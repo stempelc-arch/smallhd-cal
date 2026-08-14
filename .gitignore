@@ -1,0 +1,28 @@
+.venv/
+__pycache__/
+.pytest_cache/
+.ruff_cache/
+*.egg-info/
+*.pyc
+.DS_Store
+.claude/
+
+# Captured/generated data from real calibration sessions — not source code,
+# kept out of version control (see docs/DEVELOPING.md for the data layout).
+measurements/*.json
+measurements/*.npz
+data/firmware/*.bin
+sessions/
+profiles/
+luts/
+exports/
+_archive/
+
+# Bundled third-party ArgyllCMS copies (packaging/macos only; ~130-140MB each,
+# not project source) and build output.
+Argyll_V3.5.0*/
+build/
+dist/
+*.dmg
+*.app/
+*.spec
