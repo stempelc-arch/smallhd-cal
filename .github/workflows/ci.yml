@@ -23,7 +23,11 @@ jobs:
           pip install -r requirements.txt
 
       - name: Ruff
-        run: ruff check .
+        run: python -m ruff check .
 
+      # `python -m pytest` (not the bare `pytest` entrypoint): it puts the repo
+      # root on sys.path, which test_refine.py/test_session.py need for their
+      # `from tests.test_calibration import ...` helper imports. The bare
+      # entrypoint doesn't, since tests/ has no __init__.py.
       - name: Pytest
-        run: pytest -q
+        run: python -m pytest -q
